@@ -1,3 +1,5 @@
+import copy as copy
+
 def skf(pan, root):
     index_record = []
     for i in range(0, len(root)):
@@ -21,11 +23,11 @@ def sep(sep, skf_record):
         sep_record = sep_record + [temp]
     return sep_record
 
-def check( former, current, next):
-    a = (current[0] - former[0])
-    b = (current[1] - former[1])
-    c = (next[0] - current[0])
-    d = (next[1] - current[1])
+def check( former_two, former_one, current):
+    a = (former_one[0] - former_two[0])
+    b = (former_one[1] - former_two[1])
+    c = (current[0] - former_one[0])
+    d = (current[1] - former_one[1])
     if a == 0 or b == 0:
         if c == 0 or d == 0:
             if (a * c) - (b * d) == 0:
@@ -37,3 +39,9 @@ def check( former, current, next):
     else:
         return False
 
+def possi_route(route_data, step):
+    big_record = []
+    if step + 1 == len(route_data):
+        temp = route_data[step]
+        for i in range(0, len(temp)):
+            current = temp[i]
