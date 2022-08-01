@@ -1,18 +1,18 @@
-import copy as copy
+import sys as sys
+
+sys.setrecursionlimit(1000)
 
 def skf(pan, root):
     index_record = []
     for i in range(0, len(root)):
         temp = []
-        for j in range(0, len(pan)):  # append 带有广播性质
+        for j in range(0, len(pan)):
             if pan[j] == root[i]:
                 temp.append(j)
-
             if j + 1 == len(pan):
                 index_record = index_record + [temp]
-                # 遍历到pan最后一个元才记录进index_record, 注意这个判断是独立的
-                # #（若意外缩进该 /index if块/ 至 /比对if块/ 内，当 比对条件为False时 则会被视作 /比对if块/ 的执行块而被连带不执行导致出错）
     return index_record
+
 
 def sep(sep, skf_record):
     sep_record = []
@@ -23,11 +23,12 @@ def sep(sep, skf_record):
         sep_record = sep_record + [temp]
     return sep_record
 
-def check(former_two, former_one, current):
-    a = (former_one[0] - former_two[0])
-    b = (former_one[1] - former_two[1])
-    c = (current[0] - former_one[0])
-    d = (current[1] - former_one[1])
+
+def check(forward_two, forward_one, current):
+    a = (forward_one[0] - forward_two[0])
+    b = (forward_one[1] - forward_two[1])
+    c = (current[0] - forward_one[0])
+    d = (current[1] - forward_one[1])
     if a == 0 or b == 0:
         if c == 0 or d == 0:
             if (a * c) - (b * d) == 0:
@@ -39,35 +40,112 @@ def check(former_two, former_one, current):
     else:
         return False
 
-def possi_route(route_data, step):
+
+def possi_route(data, step, record):
+    global step_plus_one, step_plus_two, step_temp
     big_record = []
-    temp = route_data[step]
-    old_one = route_data[step - 1]
-    old_two = route_data[step - 2]
-    if step + 1 == len(route_data):
-        for r in range(0, len(temp)):
-            current = temp[r]
-            for s in range(0, len(old_one)):
-                former_one = old_one[s]
-                for t in range(0, len(old_two)):
-                    former_two = old_two[t]
-                    if check(former_two, former_one, current) == True:
-                        big_record.append(current)
-    elif step == 2 or step >2 and step+1 < len(route_data):
-        for r in range(0, len(temp)):
-            current = temp[r]
-            for s in range(0, len(old_one)):
-                former_one = old_one[s]
-                for t in range(0, len(old_two)):
-                    former_two = old_two[t]
-                    if check(former_two, former_one, current) == True:
-                        for forward in possi_route(route_data, step+1):
+
+    if len(data) < 3:
+        return False
+
+    if step + 3 < len(data) or step + 3 == len(data):
+        step_plus_one = data[step + 1]
+        step_plus_two = data[step + 2]
+        step_temp = data[step]
+
+    for step in range(0, len(data) - 2):
+        if step + 1 > len(data):
+            return big_record
+
+        elif step + 3 == len(data) and step != 0 and step != 1:
+            forward_set = record[-1]
+            forward_two = forward_set[-2]
+            forward_one = forward_set[-1]
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                if check(forward_two, forward_one, current):
+                    for j in range(0, len(step_plus_one)):
+                        next_one = step_plus_one[j]
+                        if check(forward_one, next_one, current):
+                            for k in range(0, len(step_plus_two)):
+                                next_two = step_plus_two[k]
+                                if check(next_two, next_one, current):
+                                    big_record.append([current]+[next_one]+[next_two])
+
+        elif step + 2 == len(data) and step != 0 and step != 1:
+            forward_set = record[-1]
+            forward_two = forward_set[-2]
+            forward_one = forward_set[-1]
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                if check(forward_two, forward_one, current):
+                    for j in range(0, len(step_plus_one)):
+                        next_one = step_plus_one[j]
+                        if check(forward_one, next_one, current):
+                            big_record.append([current] + [next_one])
+
+        elif step + 1 == len(data) and step != 0 and step != 1:
+            forward_set = record[-1]
+            forward_two = forward_set[-2]
+            forward_one = forward_set[-1]
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                if check(forward_two, forward_one, current):
+                    big_record.append([current])
+
+        elif step == 0:
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                for forward in possi_route(data, step + 3, record + [current]):
+                    big_record.append(forward + [current])
+
+        elif step == 1:
+            forward_set = record[-1]
+            forward_one = forward_set[-1]
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                for j in range(0, len(step_plus_one)):
+                    next_one = step_plus_one[j]
+                    if check(forward_one, next_one, current):
+                        for forward in possi_route(data, step + 3, record + [current]):
                             big_record.append(forward + [current])
-    else:
-        for r in range(0, len(temp)):
-            current = temp[r]
-            for forward in possi_route(route_data, step+1):
-                big_record.append(forward + [current])
-    return big_record
+
+        else:
+            forward_set = record[-1]
+            forward_two = forward_set[-2]
+            forward_one = forward_set[-1]
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                if check(forward_two, forward_one, current):
+                    for j in range(0, len(step_plus_one)):
+                        next_one = step_plus_one[j]
+                        if check(forward_one, next_one, current):
+                            for k in range(0, len(step_plus_two)):
+                                next_two = step_plus_two[k]
+                                if check(next_two, next_one, current):
+                                    for forward in possi_route(data, step + 3, record + [current] + [next_one] + [next_two]):
+                                        big_record.append(forward + [current] + [next_one] + [next_two])
 
 
+
+'''
+  for r in range(0, len(next_two)):
+                forward_two = temp[r]
+                current_set = big_record[-1]
+                current = current_set[-2]
+                forward_one = current_set[-1]
+'''
+
+'''
+             for r in range(0, len(next_two)):
+                current = next_two[r]
+                for s in range(0, len(next_one)):
+                    forward_one = next_one[s]
+                    for t in range(0, len(temp)):
+                        forward_two = temp[t]
+'''
+
+'''
+[current] + [forward_one] + [forward_two]
+big_record.append([current] + [next_one] + [next_two])
+'''
