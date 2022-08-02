@@ -95,8 +95,13 @@ def possi_route(data, step, record):
         elif step == 0:
             for i in range(0, len(step_temp)):
                 current = step_temp[i]
-                for forward in possi_route(data, step + 3, record + [current]):
-                    big_record.append(forward + [current])
+                for j in range(0, len(step_plus_one)):
+                    next_one = step_plus_one[j]
+                    for k in range(0, len(step_plus_two)):
+                        next_two = step_plus_two[k]
+                        if check(next_two, next_one, current):
+                            for forward in possi_route(data, step + 3, record + [current] + [next_one] + [next_two]):
+                                big_record.append(forward + [current] + [next_one] + [next_two])
 
         elif step == 1:
             forward_set = record[-1]
