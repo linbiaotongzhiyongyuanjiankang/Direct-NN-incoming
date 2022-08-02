@@ -42,7 +42,7 @@ def check(forward_two, forward_one, current):
 
 
 def possi_route(data, step, record):
-    global step_plus_one, step_plus_two, step_temp
+
     big_record = []
 
     if len(data) < 3:
@@ -53,7 +53,6 @@ def possi_route(data, step, record):
         step_plus_two = data[step + 2]
         step_temp = data[step]
 
-    for step in range(0, len(data) - 2):
         if step + 1 > len(data):
             return big_record
 
@@ -125,6 +124,7 @@ def possi_route(data, step, record):
                                 if check(next_two, next_one, current):
                                     for forward in possi_route(data, step + 3, record + [current] + [next_one] + [next_two]):
                                         big_record.append(forward + [current] + [next_one] + [next_two])
+    return big_record
 
 
 
