@@ -44,11 +44,11 @@ def check(forward_two, forward_one, current):
         return False
 
 
-global step_plus_one, step_temp, step_plus_two
+
 
 
 def possi_route(data, step, record):
-    global step_temp, step_plus_one, step_plus_two
+
     big_record = []
 
     if len(data) < 3:
@@ -118,7 +118,7 @@ def possi_route(data, step, record):
                     if check(next_two, next_one, current):
                         record = [record + [current] + [next_one] + [next_two]]
                         for forward in possi_route(data, step + 3, record):
-                            big_record.append(forward + [current] + [next_one] + [next_two])
+                            big_record.append(record + forward)
 
     elif step == 0 and len(data) == 3:
         for i in range(0, len(step_temp)):
@@ -139,8 +139,9 @@ def possi_route(data, step, record):
                 for j in range(0, len(step_plus_one)):
                     next_one = step_plus_one[j]
                     if check(forward_one, next_one, current):
-                        for forward in possi_route(data, step + 3, record + [current]):
-                            big_record.append(forward + [current])
+                        record = [record + [current]]
+                        for forward in possi_route(data, step + 3, record):
+                            big_record.append(record + forward)
 
     else:
         for idle in range(-len(record), 0):
@@ -158,11 +159,11 @@ def possi_route(data, step, record):
                                 if check(next_two, next_one, current):
                                     record = [record + [current] + [next_one] + [next_two]]
                                     for forward in possi_route(data, step + 3,record):
-                                        big_record.append(forward + [current] + [next_one] + [next_two])
+                                        big_record.append(record + forward)
     return big_record
 
 
-a = skf('VATVVVRSVVVRBA', 'ARVA')
+a = skf('VATVVVRSVVVRBA', 'ARST')
 b = sepr(5, a)
 c = possi_route(b, 0, [])
 print(c)
