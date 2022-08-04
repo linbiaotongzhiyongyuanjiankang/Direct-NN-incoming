@@ -71,54 +71,60 @@ def possi_route(data, step, record):
 
     elif step + 3 == len(data) and step != 0 and step != 1:
         for idle in range(-len(record), 0):
-            forward_set = record[idle]
-            forward_two = forward_set[-2]
-            forward_one = forward_set[-1]
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                if check(forward_two, forward_one, current):
-                    for j in range(0, len(step_plus_one)):
-                        next_one = step_plus_one[j]
-                        if check(forward_one, next_one, current):
-                            for k in range(0, len(step_plus_two)):
-                                next_two = step_plus_two[k]
-                                if check(next_two, next_one, current):
-                                    big_record.append([current] + [next_one] + [next_two])
+            if len(record[idle]) < len(data):
+                forward_set = record[idle]
+                forward_two = forward_set[-2]
+                forward_one = forward_set[-1]
+                for i in range(0, len(step_temp)):
+                    current = step_temp[i]
+                    if check(forward_two, forward_one, current):
+                        for j in range(0, len(step_plus_one)):
+                            next_one = step_plus_one[j]
+                            if check(forward_one, next_one, current):
+                                for k in range(0, len(step_plus_two)):
+                                    next_two = step_plus_two[k]
+                                    if check(next_two, next_one, current):
+                                        record[idle] = record[idle] + [next_one] + [next_two]
+                                        return record
 
     elif step + 2 == len(data) and step != 0 and step != 1:
         for idle in range(-len(record), 0):
-            forward_set = record[idle]
-            forward_two = forward_set[-2]
-            forward_one = forward_set[-1]
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                if check(forward_two, forward_one, current):
-                    for j in range(0, len(step_plus_one)):
-                        next_one = step_plus_one[j]
-                        if check(forward_one, next_one, current):
-                            big_record.append([current] + [next_one])
+            if len(record[idle]) < len(data):
+                forward_set = record[idle]
+                forward_two = forward_set[-2]
+                forward_one = forward_set[-1]
+                for i in range(0, len(step_temp)):
+                    current = step_temp[i]
+                    if check(forward_two, forward_one, current):
+                        for j in range(0, len(step_plus_one)):
+                            next_one = step_plus_one[j]
+                            if check(forward_one, next_one, current):
+                                record[idle] = record[idle] + [current] + [next_one]
+                                return record
 
     elif step + 1 == len(data) and step != 0 and step != 1:
         for idle in range(-len(record), 0):
-            forward_set = record[idle]
-            forward_two = forward_set[-2]
-            forward_one = forward_set[-1]
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                if check(forward_two, forward_one, current):
-                    big_record.append([current])
+            if len(record[idle]) < len(data):
+                forward_set = record[idle]
+                forward_two = forward_set[-2]
+                forward_one = forward_set[-1]
+                for i in range(0, len(step_temp)):
+                    current = step_temp[i]
+                    if check(forward_two, forward_one, current):
+                        record[idle] = record[idle] + [current]
+                        return record
 
     elif step == 0 and len(data) > 3:
-        for i in range(0, len(step_temp)):
-            current = step_temp[i]
-            for j in range(0, len(step_plus_one)):
-                next_one = step_plus_one[j]
-                for k in range(0, len(step_plus_two)):
-                    next_two = step_plus_two[k]
-                    if check(next_two, next_one, current):
-                        record = [record + [current] + [next_one] + [next_two]]
-                        for forward in possi_route(data, step + 3, record):
-                            big_record.append(record + forward)
+            for i in range(0, len(step_temp)):
+                current = step_temp[i]
+                for j in range(0, len(step_plus_one)):
+                    next_one = step_plus_one[j]
+                    for k in range(0, len(step_plus_two)):
+                        next_two = step_plus_two[k]
+                        if check(next_two, next_one, current):
+                            record = record + [[current] + [next_one] + [next_two]]
+                            for forward in possi_route(data, step + 3, record):
+                                big_record.append(forward)
 
     elif step == 0 and len(data) == 3:
         for i in range(0, len(step_temp)):
@@ -132,42 +138,44 @@ def possi_route(data, step, record):
 
     elif step == 1:
         for idle in range(-len(record), 0):
-            forward_set = record[idle]
-            forward_one = forward_set[-1]
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                for j in range(0, len(step_plus_one)):
-                    next_one = step_plus_one[j]
-                    if check(forward_one, next_one, current):
-                        record = [record + [current]]
-                        for forward in possi_route(data, step + 3, record):
-                            big_record.append(record + forward)
-
-    else:
-        for idle in range(-len(record), 0):
-            forward_set = record[idle]
-            forward_two = forward_set[-2]
-            forward_one = forward_set[-1]
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                if check(forward_two, forward_one, current):
+            if len(record[idle]) < len(data):
+                forward_set = record[idle]
+                forward_one = forward_set[-1]
+                for i in range(0, len(step_temp)):
+                    current = step_temp[i]
                     for j in range(0, len(step_plus_one)):
                         next_one = step_plus_one[j]
                         if check(forward_one, next_one, current):
-                            for k in range(0, len(step_plus_two)):
-                                next_two = step_plus_two[k]
-                                if check(next_two, next_one, current):
-                                    record = [record + [current] + [next_one] + [next_two]]
-                                    for forward in possi_route(data, step + 3,record):
-                                        big_record.append(forward + [current] + [next_one] + [next_two])
+                            record[idle] = record[idle] + [current]
+                            for forward in possi_route(data, step + 3, record):
+                                big_record.append(forward)
+
+    else:
+        for idle in range(-len(record), 0):
+            if len(record[idle]) < len(data):
+                forward_set = record[idle]
+                forward_two = forward_set[-2]
+                forward_one = forward_set[-1]
+                for i in range(0, len(step_temp)):
+                    current = step_temp[i]
+                    if check(forward_two, forward_one, current):
+                        for j in range(0, len(step_plus_one)):
+                            next_one = step_plus_one[j]
+                            if check(forward_one, next_one, current):
+                                for k in range(0, len(step_plus_two)):
+                                    next_two = step_plus_two[k]
+                                    if check(next_two, next_one, current):
+                                        record[idle] = record[idle] + [current] + [next_one] + [next_two]
+                                        for forward in possi_route(data, step + 3,record):
+                                            big_record.append(forward)
+
     return big_record
 
 
-a = skf('VATVVVRSVVVRBA', 'ARST')
+a = skf('VATVVVRSVVVRBA', 'ARVA')
 b = sepr(5, a)
 c = possi_route(b, 0, [])
 print(c)
-
 '''
   for r in range(0, len(next_two)):
                 forward_two = temp[r]
