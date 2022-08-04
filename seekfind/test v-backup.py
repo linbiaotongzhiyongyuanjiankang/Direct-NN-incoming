@@ -182,24 +182,3 @@ b = sepr(5, a)
 c = possi_route(b, 0, [])
 d = knockout(c, 5)
 print(d)
-'''
-  for r in range(0, len(next_two)):
-                forward_two = temp[r]
-                current_set = big_record[-1]
-                current = current_set[-2]
-                forward_one = current_set[-1]
-'''
-
-'''
-             for r in range(0, len(next_two)):
-                current = next_two[r]
-                for s in range(0, len(next_one)):
-                    forward_one = next_one[s]
-                    for t in range(0, len(temp)):
-                        forward_two = temp[t]
-'''
-
-'''
-[current] + [forward_one] + [forward_two]
-big_record.append([current] + [next_one] + [next_two])
-'''
