@@ -44,11 +44,16 @@ def check(forward_two, forward_one, current):
         return False
 
 
-
+def knockout(c, count):
+    c_record = []
+    for idle in range(0, len(c)):
+        temp_c_element = c[idle]
+        if len(temp_c_element) == count:
+            c_record.append(c[idle])
+    return c_record
 
 
 def possi_route(data, step, record):
-
     big_record = []
 
     if len(data) < 3:
@@ -115,16 +120,16 @@ def possi_route(data, step, record):
                         return record
 
     elif step == 0 and len(data) > 3:
-            for i in range(0, len(step_temp)):
-                current = step_temp[i]
-                for j in range(0, len(step_plus_one)):
-                    next_one = step_plus_one[j]
-                    for k in range(0, len(step_plus_two)):
-                        next_two = step_plus_two[k]
-                        if check(next_two, next_one, current):
-                            record = record + [[current] + [next_one] + [next_two]]
-                            for forward in possi_route(data, step + 3, record):
-                                big_record.append(forward)
+        for i in range(0, len(step_temp)):
+            current = step_temp[i]
+            for j in range(0, len(step_plus_one)):
+                next_one = step_plus_one[j]
+                for k in range(0, len(step_plus_two)):
+                    next_two = step_plus_two[k]
+                    if check(next_two, next_one, current):
+                        record = record + [[current] + [next_one] + [next_two]]
+                        for forward in possi_route(data, step + 3, record):
+                            big_record.append(forward)
 
     elif step == 0 and len(data) == 3:
         for i in range(0, len(step_temp)):
@@ -166,13 +171,14 @@ def possi_route(data, step, record):
                                     next_two = step_plus_two[k]
                                     if check(next_two, next_one, current):
                                         record[idle] = record[idle] + [current] + [next_one] + [next_two]
-                                        for forward in possi_route(data, step + 3,record):
+                                        for forward in possi_route(data, step + 3, record):
                                             big_record.append(forward)
 
     return big_record
 
 
-a = skf('VATVVVRSVVVRBA', 'ARVA')
+a = skf('VATVVVRSVVVRBA', 'ARSBA')
 b = sepr(5, a)
 c = possi_route(b, 0, [])
-print(c)
+d = knockout(c, 4)
+print(d)
