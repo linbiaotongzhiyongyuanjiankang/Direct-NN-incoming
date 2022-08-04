@@ -27,11 +27,11 @@ def sepr(sep, skf_record0):
     return sep_record
 
 
-def check(forward_two, forward_one, current):
-    a = (forward_one[0] - forward_two[0])
-    b = (forward_one[1] - forward_two[1])
-    c = (current[0] - forward_one[0])
-    d = (current[1] - forward_one[1])
+def check(Q, W, E):
+    a = (W[0] - Q[0])
+    b = (W[1] - Q[1])
+    c = (E[0] - W[0])
+    d = (E[1] - W[1])
     if a == 0 or b == 0:
         if c == 0 or d == 0:
             if (a * c) - (b * d) == 0:
@@ -103,7 +103,7 @@ def possi_route(data, step, record):
                     if check(forward_two, forward_one, current):
                         for j in range(0, len(step_plus_one)):
                             next_one = step_plus_one[j]
-                            if check(forward_one, next_one, current):
+                            if check(forward_one, current, next_one):
                                 record[idle] = record[idle] + [current] + [next_one]
                                 return record
 
@@ -180,5 +180,5 @@ def possi_route(data, step, record):
 a = skf('VATVVVRSVVVRBA', 'ARSBA')
 b = sepr(5, a)
 c = possi_route(b, 0, [])
-d = knockout(c, 4)
+d = knockout(c, 5)
 print(d)
