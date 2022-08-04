@@ -85,7 +85,7 @@ def possi_route(data, step, record):
                     if check(forward_two, forward_one, current):
                         for j in range(0, len(step_plus_one)):
                             next_one = step_plus_one[j]
-                            if check(forward_one, next_one, current):
+                            if check(forward_one, current, next_one):
                                 for k in range(0, len(step_plus_two)):
                                     next_two = step_plus_two[k]
                                     if check(next_two, next_one, current):
@@ -150,7 +150,7 @@ def possi_route(data, step, record):
                     current = step_temp[i]
                     for j in range(0, len(step_plus_one)):
                         next_one = step_plus_one[j]
-                        if check(forward_one, next_one, current):
+                        if check(forward_one, current, next_one):
                             record[idle] = record[idle] + [current]
                             for forward in possi_route(data, step + 3, record):
                                 big_record.append(forward)
@@ -166,7 +166,7 @@ def possi_route(data, step, record):
                     if check(forward_two, forward_one, current):
                         for j in range(0, len(step_plus_one)):
                             next_one = step_plus_one[j]
-                            if check(forward_one, next_one, current):
+                            if check(forward_one, current, next_one):
                                 for k in range(0, len(step_plus_two)):
                                     next_two = step_plus_two[k]
                                     if check(next_two, next_one, current):
@@ -177,8 +177,8 @@ def possi_route(data, step, record):
     return big_record
 
 
-a = skf('VATVVVRSVVVRBA', 'ARSBA')
+a = skf('VATVVVRSVVVRBA', 'ARSBAV')
 b = sepr(5, a)
 c = possi_route(b, 0, [])
-d = knockout(c, 5)
+d = knockout(c, 6)
 print(d)
