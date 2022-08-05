@@ -89,7 +89,7 @@ def possi_route(data, step, record):
                                 for k in range(0, len(step_plus_two)):
                                     next_two = step_plus_two[k]
                                     if check(next_two, next_one, current):
-                                        record[idle] = record[idle] + [next_one] + [next_two]
+                                        record[idle] = record[idle] + [current] + [next_one] + [next_two]
                                         return record
 
     elif step + 2 == len(data) and step != 0 and step != 1:
