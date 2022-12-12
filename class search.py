@@ -27,21 +27,24 @@ def sepr(sep, skf_record0):
     return sep_record
 
 
-def check(Q, W, E):
-    a = (W[0] - Q[0])
-    b = (W[1] - Q[1])
-    c = (E[0] - W[0])
-    d = (E[1] - W[1])
-    if a == 0 or b == 0:
-        if c == 0 or d == 0:
-            if (a * c) - (b * d) == 0:
-                return True
+def check(self,Q, W, E):
+        a = (W[0] - Q[0])
+        b = (W[1] - Q[1])
+        c = (E[0] - W[0])
+        d = (E[1] - W[1])
+        if a == 0 or b == 0:
+            if c == 0 or d == 0:
+                if a!=0 or b!=0 and c!=0 or d!=0:
+                    if (a * c) + (b * d) == 0:#sum of element-wise product
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
             else:
                 return False
         else:
             return False
-    else:
-        return False
 
 
 def knockout(c, count):
