@@ -42,8 +42,11 @@ class depth_search_functions:
         d = (E[1] - W[1])
         if a == 0 or b == 0:
             if c == 0 or d == 0:
-                if (a * c) - (b * d) == 0:
-                    return True
+                if a!=0 or b!=0 and c!=0 or d!=0:
+                    if (a * c) + (b * d) == 0:
+                        return True
+                    else:
+                        return False
                 else:
                     return False
             else:
